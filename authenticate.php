@@ -1,3 +1,4 @@
+<?php
 define('ADMIN_LOGIN','wally');
 
 define('ADMIN_PASSWORD','mypass');
@@ -15,3 +16,4 @@ if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])
   exit("Access Denied: Username and password required.");
 
 }
+?>
