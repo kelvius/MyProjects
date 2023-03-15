@@ -18,7 +18,7 @@ if (
         $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "INSERT INTO blogs (title, content) VALUES (:title, :content)";
+        $query = "INSERT INTO content_post (title, content) VALUES (:title, :content)";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
@@ -38,8 +38,8 @@ if (
         $id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        //$query = "UPDATE blogs SET title=$title, content=$content WHERE id=$id";
-        $query = "UPDATE blogs SET title = :title, content = :content WHERE post_id = :post_id";
+        //$query = "UPDATE content_post SET title=$title, content=$content WHERE id=$id";
+        $query = "UPDATE content_post SET title = :title, content = :content WHERE post_id = :post_id";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
@@ -59,7 +59,7 @@ if (
         $id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
         
         //  Build the parameterized SQL query and bind to the above sanitized values.";
-        $query = "DELETE FROM blogs WHERE post_id = :post_id";
+        $query = "DELETE FROM content_post WHERE post_id = :post_id";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
