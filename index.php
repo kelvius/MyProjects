@@ -41,7 +41,7 @@ $content = "";
                     <a href="index.php" class="active">Home</a>
                 </li>
                 <li>
-                    <a href="create.php">New Post</a>
+                    <a href="authenticate.php">New Post</a>
                 </li>
             </ul>
         </div>

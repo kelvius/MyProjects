@@ -8,7 +8,7 @@ Description: Project
 
 
 require('connect.php');
-require('authenticate.php');
+//require('authenticate.php');
 
     ?>
 
