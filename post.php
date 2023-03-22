@@ -7,6 +7,7 @@ Description: Project
 ****************/
 
 require('connect.php');
+session_start();
 
 if (
     $_POST && !empty($_POST['title']) && strlen($_POST['title']) >= 1 &&
@@ -16,12 +17,15 @@ if (
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRIPPED);
         $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+        $poster_id = $_SESSION['user_id'];
+        //log($_SESSION['user_id']);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "INSERT INTO content_post (title, content) VALUES (:title, :content)";
+        $query = "INSERT INTO content_post (poster_id, title, content) VALUES (:poster_id, :title, :content)";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
+        $statement->bindValue(":poster_id",$poster_id);
         $statement->bindValue(":title", $title);
         $statement->bindValue(":content", $content);
 
@@ -35,7 +39,7 @@ if (
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRIPPED);
         $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
-        $id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
+        $post_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
         //$query = "UPDATE content_post SET title=$title, content=$content WHERE id=$id";
@@ -45,7 +49,7 @@ if (
         //  Bind values to the parameters
         $statement->bindValue(":title", $title);
         $statement->bindValue(":content", $content);
-        $statement->bindValue(":post_d", $post_id);
+        $statement->bindValue(":post_id", $post_id);
 
         //  Execute the UPDATE.
         //  execute() will check for possible SQL injection and remove if necessary
@@ -56,14 +60,14 @@ if (
 
     } else if (isset($_POST['delete'])) {
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
-        $id = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
+        $post_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         
         //  Build the parameterized SQL query and bind to the above sanitized values.";
         $query = "DELETE FROM content_post WHERE post_id = :post_id";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
-        $statement->bindParam(":;post_id", $post_id);
+        $statement->bindParam(":post_id", $post_id);
 
         //  Execute the DELETE.
         //  execute() will check for possible SQL injection and remove if necessary

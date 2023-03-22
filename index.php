@@ -60,7 +60,7 @@ $content = "";
                                 </p>
                             </div>
                             <?php if (strlen($row['content']) >= 200): {
-                                $content = mb_substr($row['content'], 0, 200) . "<a href='display.php?id=" . $row['pos_id'] . "'>Read Full Post</a>";
+                                $content = mb_substr($row['content'], 0, 200) . "<a href='display.php?id=" . $row['post_id'] . "'>Read Full Post</a>";
                             }
                             ?>
                             <?php else: ?>

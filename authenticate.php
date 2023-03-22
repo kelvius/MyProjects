@@ -1,24 +1,13 @@
 <?php
-define('ADMIN_LOGIN', 'wally');
+define('ADMIN_LOGIN', 'admin');
 
-define('ADMIN_PASSWORD', 'mypass');
+define('ADMIN_PASSWORD', 'admin');
 
 
-
-// if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])
-
-//     || ($_SERVER['PHP_AUTH_USER'] != ADMIN_LOGIN)
-
-//     || ($_SERVER['PHP_AUTH_PW'] != ADMIN_PASSWORD)) {
-
-//   header('HTTP/1.1 401 Unauthorized');
-
-//   header('WWW-Authenticate: Basic realm="Drip Book"');
-
-//   exit("Access Denied: Username and password required.");
-
-// }
 session_start();
+// Used to clear the session while logout is still in progress
+// session_unset(); 
+// session_destroy(); 
 $userIdSet = isset($_SESSION['user_id']);
 $userRoleSet = isset($_SESSION['user_role']);
 
@@ -30,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     !isset($_POST['username']) && !isset($_POST['password'])
     || (($_POST['username']) != ADMIN_LOGIN) || (($_POST['password']) != ADMIN_PASSWORD)
   ) {
-    echo ("Access Denied");
+    echo ("Login Failed");
     exit;
   } else {
         $_SESSION['user_id'] = ($_POST['username']);
@@ -39,8 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 }else{
-  echo($_SESSION['user_id']);
-  header('Location: create.php');
+  echo("Login Successful");
+ // header("refresh:5;url=create.php");
+ header('Location: create.php');
 }
 ?>
 

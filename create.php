@@ -10,7 +10,7 @@ Description: Project
 require('connect.php');
 //require('authenticate.php');
 
-    ?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +21,12 @@ require('connect.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <title>Edit this Post!</title>
+    <script src='tinymce/tinymce.min.js'></script>
+    <script>
+        tinymce.init({
+            selector: '#content'
+        });
+    </script>
 </head>
 
 <body>
@@ -39,7 +45,7 @@ require('connect.php');
                     <legend>Edit Drip Post</legend>
                     <p>
                         <label for="title">Title</label>
-                        <input name="title" id="title" >
+                        <input name="title" id="title">
                     </p>
                     <p>
                         <label for="content">Content</label>
@@ -47,7 +53,7 @@ require('connect.php');
                     </p>
                     <p>
                         <input type="hidden" name="id">
-                        <input type="submit" name="create" value="Create" >
+                        <input type="submit" name="create" value="Create">
                     </p>
                 </fieldset>
             </form>
