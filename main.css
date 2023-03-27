@@ -109,3 +109,9 @@ div#footer {
   text-align: right;
   margin-top: 10px;
 }
+
+.user{
+  border: 2px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}

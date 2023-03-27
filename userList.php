@@ -9,7 +9,7 @@ Description: Project
 require('connect.php');
 
 // SQL is written as a String.
-$query = "SELECT * FROM content_post ORDER BY post_id DESC LIMIT 5";
+$query = "SELECT * FROM users ORDER BY user_id DESC LIMIT 10";
 
 // A PDO::Statement is prepared from the query.
 $statement = $db->prepare($query);
@@ -35,10 +35,10 @@ $content = "";
      <!-- Remember that alternative syntax is good and html inside php is bad -->
      <div id="wrapper">
         <div id="header">
-            <h1> Kelvin's Blog - Index </h1>
+            <h1> Kelvin's Blog - User Ids </h1>
             <ul class="menu">
                 <li>
-                    <a href="index.php" class="active">Home</a>
+                    <a href="index.php" >Home</a>
                 </li>
                 <li>
                     <a href="authenticate.php">New Post</a>
@@ -47,39 +47,29 @@ $content = "";
                     <a href="registration.php">Register User</a>
                 </li>
                 <li>
-                    <a href="userList.php">User list</a>
+                    <a href="userList.php" class="active">User list</a>
                 </li>
             </ul>
         </div>
-        <div id="all_blogs">
+        <div id="all_user">
             <?php if ($statement->rowCount() > 0): ?>
                 <?php while ($row = $statement->fetch()): ?>
                     <ul class="menu">
                         <li>
-                            <div class="blog_post">
-                                <h2><a href="display.php?id=<?= $row['post_id'] ?>"><?= $row['title'] ?></a> </h2>
+                            <div class="user">
+                                <h2>User name: <?= $row['name'] ?></a> </h2>
                                 <p>
-                                    <small>
-                                        <?= date("F d, Y, h:ia", strtotime($row['created_at_date'])) ?>
-                                        <a href="edit.php?id=<?= $row['post_id'] ?>">edit</a>
+                                    <small>  User email: 
+                                        <?=($row['email']) ?>
+                                        <h3>Role: <?= $row['user_lvl'] ?></h3>
                                     </small>
                                 </p>
-                            </div>
-                            <?php if (strlen($row['content']) >= 200): {
-                                $content = mb_substr($row['content'], 0, 200) . "<a href='display.php?id=" . $row['post_id'] . "'>Read Full Post</a>";
-                            }
-                            ?>
-                            <?php else: ?>
-                                <?php $content = $row['content'] ?>
-                            <?php endif ?>
-                            <div class='blog_content'>
-                                <?= $content ?>
                             </div>
                         </li>
                     </ul>
                 <?php endwhile ?>
             <?php else: ?>
-                <h2>No blogs found.</h2>
+                <h2>No user found.</h2>
             <?php endif ?>
         </div>
         <div id="footer">

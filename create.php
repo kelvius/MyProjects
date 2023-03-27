@@ -93,10 +93,13 @@ session_start();
                     <a href="index.php" >Home</a>
                 </li>
                 <li>
-                    <a href="authenticate.php" class="active">New Post</a>
+                    <a href="authenticate.php" >New Post</a>
                 </li>
                 <li>
                     <a href="registration.php">Register User</a>
+                </li>
+                <li>
+                    <a href="userList.php" class="active">User list</a>
                 </li>
             </ul>
         <div id="all_blogs">
