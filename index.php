@@ -43,6 +43,9 @@ $content = "";
                 <li>
                     <a href="authenticate.php">New Post</a>
                 </li>
+                <li>
+                    <a href="registration.php">Register User</a>
+                </li>
             </ul>
         </div>
         <div id="all_blogs">

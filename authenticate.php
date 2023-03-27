@@ -1,29 +1,56 @@
 <?php
-define('ADMIN_LOGIN', 'admin');
 
-define('ADMIN_PASSWORD', 'admin');
-
-
+require('connect.php');
 session_start();
+
+define('ADMIN_LOGIN', '1');
+define('ADMIN_EMAIL', 'test2@mail.com');
+
+define('ADMIN_PASSWORD', '1');
+
+$userNameSet = isset($_SESSION['user_name']);
+$userLvlSet = isset($_SESSION['user_lvl']);
+$userEmailSet = isset($_SESSION['user_email']);
+
+echo($_SESSION['user_name']);
+echo($_SESSION['user_lvl']);
+echo($_SESSION['user_email']);
+
 // Used to clear the session while logout is still in progress
 // session_unset(); 
 // session_destroy(); 
-$userIdSet = isset($_SESSION['user_id']);
-$userRoleSet = isset($_SESSION['user_role']);
+
 
 // Check if session is already set 
-if(!$userIdSet && !$userRoleSet){
+if(!$userNameSet && !$userLvlSet && !$userEmailSet){
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Code to handle form submission
   if (
-    !isset($_POST['username']) && !isset($_POST['password'])
-    || (($_POST['username']) != ADMIN_LOGIN) || (($_POST['password']) != ADMIN_PASSWORD)
+    !isset($_POST['email']) && !isset($_POST['password'])
   ) {
     echo ("Login Failed");
     exit;
   } else {
-        $_SESSION['user_id'] = ($_POST['username']);
-    $_SESSION['user_role'] = 'Admin';
+    // SQL is written as a String.
+      // SQL is written as a String.
+      $userMail = ($_POST['email']);
+      echo($userMail);
+
+$query = "SELECT * FROM users WHERE email = :email" ;
+
+// A PDO::Statement is prepared from the query.
+$statement = $db->prepare($query);
+$statement->bindParam(':email', $userMail);
+// Execution on the DB server is delayed until we execute().
+$statement->execute();
+
+$row = $statement->fetch();
+
+$_SESSION['user_name'] = $row['name'];
+$_SESSION['user_id'] = $row['user_id'];
+$_SESSION['user_lvl'] = $row['user_lvl'];
+$_SESSION['user_email'] = ($_POST['email']);
+
     header('Location: create.php');
   }
 }
@@ -49,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
   <h2>Login Form</h2>
   <form name="signup" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username"><br><br>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email"><br><br>
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password"><br><br>

@@ -16,16 +16,20 @@ if (
     if (isset($_POST['create'])) {
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRIPPED);
-        $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
-        $poster_id = $_SESSION['user_id'];
+
+        $content = $_POST['content'];
+   
+        $user_id = $_SESSION['user_id'];
+        
+        echo($user_id);
         //log($_SESSION['user_id']);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "INSERT INTO content_post (poster_id, title, content) VALUES (:poster_id, :title, :content)";
+        $query = "INSERT INTO content_post (user_id, title, content) VALUES (:user_id, :title, :content)";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
-        $statement->bindValue(":poster_id",$poster_id);
+        $statement->bindValue(":user_id", $user_id);
         $statement->bindValue(":title", $title);
         $statement->bindValue(":content", $content);
 
@@ -38,7 +42,7 @@ if (
     } else if (isset($_POST['update'])) {
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRIPPED);
-        $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+        $content = $_POST['content'];
         $post_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
@@ -61,7 +65,7 @@ if (
     } else if (isset($_POST['delete'])) {
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $post_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        
+
         //  Build the parameterized SQL query and bind to the above sanitized values.";
         $query = "DELETE FROM content_post WHERE post_id = :post_id";
         $statement = $db->prepare($query);
@@ -75,8 +79,8 @@ if (
             header("Location: index.php");
             exit;
         }
-
     }
+   
 } else {
     $errorMessage = "The tweet message or title is empty";
 }

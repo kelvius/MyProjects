@@ -62,7 +62,7 @@ if (filteredData()) {
                 <h2><a href="blogs.php?id=<?= $blogData['post_id'] ?>"><?= $blogData['title'] ?></a></h2>
                     <p>
                         <small>
-                        <?= date("F d, Y, h:ia", strtotime($blogData['dateTime'])) ?>
+                        <?= date("F d, Y, h:ia", strtotime($blogData['created_at_date'])) ?>
                                         <a href="edit.php?id=<?= $blogData['post_id'] ?>">edit</a>
                         </small>
                     </p>
