@@ -34,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // SQL is written as a String.
       // SQL is written as a String.
       $userMail = ($_POST['email']);
-      echo($userMail);
 
 $query = "SELECT * FROM users WHERE email = :email" ;
 

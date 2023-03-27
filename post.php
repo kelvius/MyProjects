@@ -20,9 +20,6 @@ if (
         $content = $_POST['content'];
    
         $user_id = $_SESSION['user_id'];
-        
-        echo($user_id);
-        //log($_SESSION['user_id']);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
         $query = "INSERT INTO content_post (user_id, title, content) VALUES (:user_id, :title, :content)";

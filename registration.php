@@ -75,6 +75,9 @@ exit;
     <label for="password">Password:</label>
     <input type="password" id="password" name="password"><br><br>
 
+    <label for="reenter_password">Reenter Password:</label>
+    <input type="password" id="reenter_password" name="reenter_password"><br><br>
+
     <label for="remember">Remember me</label>
     <input type="checkbox" name="remember" value="Remember me ">
 

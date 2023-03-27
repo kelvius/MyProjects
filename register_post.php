@@ -14,8 +14,10 @@ if (
 ) {
     if (isset($_POST['register'])) {
         if (
-            isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty(($_POST['email']))
+            isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password']) && isset($_POST['reenter_password']) && !empty($_POST['reenter_password']) && 
+            filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty(($_POST['email']) && $_POST['password'] == $_POST['reenter_password'])
         ) {
+            
             //  Sanitize user input to escape HTML entities and filter out dangerous characters.
             $client_name = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRIPPED);
             $client_email = $_POST['email'];

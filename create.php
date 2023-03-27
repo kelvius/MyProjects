@@ -10,7 +10,6 @@ Description: Project
 require('connect.php');
 //require('authenticate.php');
 session_start();
-echo($_SESSION['user_id']);
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +102,7 @@ echo($_SESSION['user_id']);
         <div id="all_blogs">
             <form action="post.php" method="post">
                 <fieldset>
-                    <legend>Edit Drip Post</legend>
+                    <legend>Create Drip Post</legend>
                     <p>
                         <label for="title">Title</label>
                         <input name="title" id="title">
