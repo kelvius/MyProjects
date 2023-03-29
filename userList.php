@@ -62,6 +62,7 @@ $content = "";
                                     <small>  User email: 
                                         <?=($row['email']) ?>
                                         <h3>Role: <?= $row['user_lvl'] ?></h3>
+                                        <a href="editUsers.php?user_id=<?= $row['user_id'] ?>">edit</a>
                                     </small>
                                 </p>
                             </div>
