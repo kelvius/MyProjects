@@ -1,9 +1,6 @@
 <?php
-define('ADMIN_LOGIN', 'admin');
-
-define('ADMIN_PASSWORD', 'admin');
-
 require('connect.php');
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Code to handle form submission
@@ -36,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Remember that alternative syntax is good and html inside php is bad -->
     <div id="wrapper">
         <div id="header">
-            <h1><a href="index.php">Kelvin's Blog - New Blog Post</a></h1>
+            <h1><a href="index.php">Kelvin's Blog - Register User</a></h1>
         </div>
         <ul class="menu">
             <li>
@@ -52,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <li>
                             <a href="userList.php">User list</a>
                         </li>
-                <?php endif?>
+            <?php endif?>
         </ul>
         <div id="all_blogs">
             <form name="registration_form" action="register_post.php" method="post">
