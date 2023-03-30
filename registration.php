@@ -48,6 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <li>
                 <a href="registration.php" class="active">Register User</a>
             </li>
+            <?php if(isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1 ): ?>
+                        <li>
+                            <a href="userList.php">User list</a>
+                        </li>
+                <?php endif?>
         </ul>
         <div id="all_blogs">
             <form name="registration_form" action="register_post.php" method="post">

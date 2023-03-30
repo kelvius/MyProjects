@@ -98,9 +98,11 @@ session_start();
                 <li>
                     <a href="registration.php">Register User</a>
                 </li>
-                <li>
-                    <a href="userList.php" >User list</a>
-                </li>
+                <?php if(isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1 ): ?>
+                        <li>
+                            <a href="userList.php">User list</a>
+                        </li>
+                <?php endif?>
             </ul>
         <div id="all_blogs">
             <form action="post.php" method="post">

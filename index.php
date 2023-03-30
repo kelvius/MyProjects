@@ -7,6 +7,9 @@ Description: Project
 ****************/
 
 require('connect.php');
+session_start();
+// session_unset(); 
+// session_destroy(); 
 
 // SQL is written as a String.
 $query = "SELECT * FROM content_post ORDER BY post_id DESC LIMIT 5";
@@ -46,9 +49,13 @@ $content = "";
                 <li>
                     <a href="registration.php">Register User</a>
                 </li>
-                <li>
-                    <a href="userList.php">User list</a>
-                </li>
+                <? echo("THIS IS SESSION LVL" + $_SESSION['user_lvl'])?>
+                <?php if(isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1 ): ?>
+                        <li>
+                            <a href="userList.php">User list</a>
+                        </li>
+                <?php endif?>
+                    
             </ul>
         </div>
         <div id="all_blogs">
