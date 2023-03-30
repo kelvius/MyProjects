@@ -3,18 +3,14 @@
 require('connect.php');
 session_start();
 
-define('ADMIN_LOGIN', '1');
-define('ADMIN_EMAIL', 'test2@mail.com');
+// define('ADMIN_LOGIN', '1');
+// define('ADMIN_EMAIL', 'test2@mail.com');
 
 define('ADMIN_PASSWORD', '1');
 
 $userNameSet = isset($_SESSION['user_name']);
 $userLvlSet = isset($_SESSION['user_lvl']);
 $userEmailSet = isset($_SESSION['user_email']);
-
-echo($_SESSION['user_name']);
-echo($_SESSION['user_lvl']);
-echo($_SESSION['user_email']);
 
 // Used to clear the session while logout is still in progress
 // session_unset(); 
