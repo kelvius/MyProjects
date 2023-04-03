@@ -25,8 +25,8 @@ if (
                 $user_id = 0;
             }
             $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_STRIPPED);
-
             $post_id = $_POST['post_id'];
+
             $visibility = 1;
 
             //  Build the parameterized SQL query and bind to the above sanitized values.
@@ -48,6 +48,25 @@ if (
             echo ('Comment Failed please complete all the required fields.');
             exit;
         }
+    } else if (isset($_POST['delete'])) {
+        //  Sanitize user input to escape HTML entities and filter out dangerous characters.
+        $comment_id = $_POST['comment_id'];
+    $post_id = $_POST['post_id'];
+
+echo("Testing commentId: $comment_id");
+        //  Build the parameterized SQL query and bind to the above sanitized values.";
+        $query = "DELETE FROM comments WHERE comment_id = :comment_id";
+        $statement = $db->prepare($query);
+
+        //  Bind values to the parameters
+        $statement->bindParam(":comment_id", $comment_id);
+
+        //  Execute the DELETE.
+//  execute() will check for possible SQL injection and remove if necessary
+        if ($statement->execute()) {
+           // header("Location: display.php?id=$post_id");
+        }
+
     }
 
 } else {

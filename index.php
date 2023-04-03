@@ -40,7 +40,7 @@ $content = "";
         <div id="header">
             <div id="user_header">
                 <h1> Kelvin's Blog - Index </h1>
-                <?php if (isset($_SESSION['user_lvl'])): ?>
+                <?php if (isset($_SESSION['user_id'])): ?>
                 <form action="post.php" method="post">
                     <p>
                         <input type="submit" name="logout" value="logout"

@@ -6,6 +6,7 @@ session_start();
 // define('ADMIN_LOGIN', '1');
 // define('ADMIN_EMAIL', 'test2@mail.com');
 
+$userIdSet = isset($_SESSION['user_id']);
 $userNameSet = isset($_SESSION['user_name']);
 $userLvlSet = isset($_SESSION['user_lvl']);
 $userEmailSet = isset($_SESSION['user_email']);
@@ -15,7 +16,7 @@ $userEmailSet = isset($_SESSION['user_email']);
 // session_destroy(); 
 
 // Check if session is already set 
-if (!$userNameSet && !$userLvlSet && !$userEmailSet) {
+if (!$userIdSet && !$userNameSet && !$userLvlSet && !$userEmailSet) {
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Code to handle form submission
     if (
