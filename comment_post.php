@@ -48,6 +48,23 @@ if (
             echo ('Comment Failed please complete all the required fields.');
             exit;
         }
+    } else if (isset($_POST['visibility'])) {
+        $comment_id = $_POST['comment_id'];
+        $post_id = $_POST['post_id'];
+
+        echo ("Testing commentId: $comment_id");
+        //  Build the parameterized SQL query and bind to the above sanitized values.";
+        $query = "DELETE FROM comments WHERE comment_id = :comment_id";
+
+        $statement = $db->prepare($query);
+
+        //  Bind values to the parameters
+        $statement->bindParam(":comment_id", $comment_id);
+
+        //  Execute the DELETE.
+        if ($statement->execute()) {
+            header("Location: display.php?id=$post_id");
+        }
     } else if (isset($_POST['delete'])) {
         echo ($_POST['comment_id']);
         $comment_id = $_POST['comment_id'];
@@ -63,11 +80,9 @@ if (
         $statement->bindParam(":comment_id", $comment_id);
 
         //  Execute the DELETE.
-//  execute() will check for possible SQL injection and remove if necessary
         if ($statement->execute()) {
             header("Location: display.php?id=$post_id");
         }
-
     }
 
 } else {
