@@ -7,8 +7,10 @@ Description: Project
 ****************/
 
 require('connect.php');
-
+session_start();
 $id = 0;
+
+
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 }
@@ -59,7 +61,7 @@ if (filteredData()) {
             </ul>
             <div id="all_blogs">
                 <div class="blog_post">
-                <h2><a href="blogs.php?id=<?= $blogData['post_id'] ?>"><?= $blogData['title'] ?></a></h2>
+                <h2><a href="edit.php?id=<?= $blogData['post_id'] ?>"><?= $blogData['title'] ?></a></h2>
                     <p>
                         <small>
                         <?= date("F d, Y, h:ia", strtotime($blogData['created_at_date'])) ?>
@@ -71,6 +73,33 @@ if (filteredData()) {
                     </div>
                 </div>
             </div>
+
+            <div id = "blog_comments">
+            <form action="comment_post.php" method="post">
+                <fieldset>
+                    <legend>Comment post</legend>
+                    <p>
+                        <label for="name">Name</label>
+                        <?php if(isset($_SESSION['user_name'])):?>
+                            <input name="name" id="name" value="<?= $_SESSION['user_name']?>" >
+                            <?php else:?>
+                                <input name="name" id="name" >
+                            <?php endif ?>
+                    </p>
+                    <p>
+                        <label for="comment">Comment</label>
+                        <textarea name="comment" id="comment"></textarea>
+                    </p>
+                    <p>
+                        <input type="hidden" name="post_id" value="<?= $blogData['post_id']?>">
+                        <input type="hidden" name="title" value="<?= $blogData['title']?>">
+                        <input type="submit" name="submit" value="Comment">
+                    </p>
+                </fieldset>
+            </form>
+
+            
+</div>
             <div id="footer">
                 Copywrong 2023 - No Rights Reserved
             </div>
