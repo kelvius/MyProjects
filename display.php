@@ -119,6 +119,7 @@ if (filteredData()) {
                 <?php if ($statement_comments->rowCount() > 0): ?>
                     <?php while ($row = $statement_comments->fetch()): ?>
                         <ul class="menu">
+                        <?php if(($row['visibility'] === 1 || isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1)):?>
                             <li class="comment_listItem">
                                 <div class="blog_comments">
                                     <h2>
@@ -133,17 +134,20 @@ if (filteredData()) {
                                 <p>
                                     <?= $row['comment'] ?>
                                 </p>
+                                <?php if((isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1)):?>
                                 <p>
                                 <form action="comment_post.php" method="post">
                                     <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
                                     <input type="hidden" name="comment_id" value="<?= $row['comment_id'] ?>">
-                                    <input type="submit" name="disemvowel" value="Disemvowel"
+                                    <input type="submit" name="visibility" value="Hide"
                                         onclick="return confirm('Are you sure you wish to disebvowel this post?')">
                                     <input type="submit" name="delete" value="Delete"
                                         onclick="return confirm('Are you sure you wish to delete this post?')">
                                 </form>
                                 </p>
+                                <?php endif?>
                             </li>
+                            <?php endif?>
                         </ul>
                     <?php endwhile ?>
                 <?php else: ?>

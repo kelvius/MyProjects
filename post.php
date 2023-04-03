@@ -82,7 +82,7 @@ if (
     //Logout user fromt the system
     session_unset();
     session_destroy();
-    header("Location: authenticate.php");
+    header("Location: index.php");
     exit;
 
 } else {
