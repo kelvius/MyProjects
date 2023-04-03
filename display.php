@@ -27,11 +27,11 @@ function filteredData()
 if (filteredData()) {
     // SQL is written as a String.
     $query = "SELECT * FROM content_post WHERE post_id = $id";
-   
+
 
     // A PDO::Statement is prepared from the query.
     $statement = $db->prepare($query);
-   
+
 
     // Execution on the DB server is delayed until we execute().
     $statement->execute();
@@ -41,13 +41,13 @@ if (filteredData()) {
     //$blogComments = $statement_comments->fetch();
 
     // SQL is written as a String.
-    $query_comments = "SELECT * FROM comments WHERE post_id = $id" ;
+    $query_comments = "SELECT * FROM comments WHERE post_id = $id";
 
-// A PDO::Statement is prepared from the query.
-$statement_comments = $db->prepare($query_comments);
+    // A PDO::Statement is prepared from the query.
+    $statement_comments = $db->prepare($query_comments);
 
-// Execution on the DB server is delayed until we execute().
-$statement_comments->execute();
+    // Execution on the DB server is delayed until we execute().
+    $statement_comments->execute();
 
 }
 ?>
@@ -114,43 +114,44 @@ $statement_comments->execute();
         </div>
 
         <div id="comments">
-        <form action="comment_post.php" method="post">
-                <fieldset>
-                    <legend>Comments</legend>
-                    <?php if ($statement_comments->rowCount() > 0): ?>
-                        <?php while ($row = $statement_comments->fetch()): ?>
-                            <ul class="menu">
-                                <li class="comment_listItem">
-                                    <div class="blog_comments">
-                                        <h2>
-                                            <?= $row['name'] ?>
-                                        </h2>
-                                        <p>
-                                            <small>
-                                                <?= date("F d, Y, h:ia", strtotime($row['date_created'])) ?>
-                                            </small>
-                                        </p>
-                                    </div>
+            <fieldset>
+                <legend>Comments</legend>
+                <?php if ($statement_comments->rowCount() > 0): ?>
+                    <?php while ($row = $statement_comments->fetch()): ?>
+                        <ul class="menu">
+                            <li class="comment_listItem">
+                                <div class="blog_comments">
+                                    <h2>
+                                        <?= $row['name'] ?>
+                                    </h2>
                                     <p>
-                                        <?= $row['comment'] ?>
+                                        <small>
+                                            <?= date("F d, Y, h:ia", strtotime($row['date_created'])) ?>
+                                        </small>
                                     </p>
-                                    <p>
-                                        <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
-                                        <input type="hidden" name="comment_id" value="<?= $row['comment_id'] ?>">
-                                        <input type="submit" name="disemvowel" value="Disemvowel"
-                                            onclick="return confirm('Are you sure you wish to disebvowel this post?')">
-                                        <input type="submit" name="delete" value="Delete"
-                                            onclick="return confirm('Are you sure you wish to delete this post?')">
-                                    </p>
-                                </li>
-                            </ul>
-                        <?php endwhile ?>
-                    <?php else: ?>
-                        <h2>No comments available.</h2>
-                    <?php endif ?>
-                    <fieldset>
-            </form>
+                                </div>
+                                <p>
+                                    <?= $row['comment'] ?>
+                                </p>
+                                <p>
+                                <form action="comment_post.php" method="post">
+                                    <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                    <input type="hidden" name="comment_id" value="<?= $row['comment_id'] ?>">
+                                    <input type="submit" name="disemvowel" value="Disemvowel"
+                                        onclick="return confirm('Are you sure you wish to disebvowel this post?')">
+                                    <input type="submit" name="delete" value="Delete"
+                                        onclick="return confirm('Are you sure you wish to delete this post?')">
+                                </form>
+                                </p>
+                            </li>
+                        </ul>
+                    <?php endwhile ?>
+                <?php else: ?>
+                    <h2>No comments available.</h2>
+                <?php endif ?>
+            </fieldset>
         </div>
+
         <div id="footer">
             Copywrong 2023 - No Rights Reserved
         </div>
