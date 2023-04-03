@@ -49,7 +49,7 @@ if (
             exit;
         }
     } else if (isset($_POST['delete'])) {
-        echo($_POST['comment_id']);
+        echo ($_POST['comment_id']);
         $comment_id = $_POST['comment_id'];
         $post_id = $_POST['post_id'];
 
@@ -65,7 +65,7 @@ if (
         //  Execute the DELETE.
 //  execute() will check for possible SQL injection and remove if necessary
         if ($statement->execute()) {
-             header("Location: display.php?id=$post_id");
+            header("Location: display.php?id=$post_id");
         }
 
     }
