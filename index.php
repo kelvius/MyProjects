@@ -35,10 +35,18 @@ $content = "";
 </head>
 
 <body>
-     <!-- Remember that alternative syntax is good and html inside php is bad -->
-     <div id="wrapper">
+    <!-- Remember that alternative syntax is good and html inside php is bad -->
+    <div id="wrapper">
         <div id="header">
-            <h1> Kelvin's Blog - Index </h1>
+            <div id="user_header">
+                <h1> Kelvin's Blog - Index </h1>
+                <form action="post.php" method="post">
+                    <p>
+                        <input type="submit" name="logout" value="logout"
+                            onclick="return confirm('Are you sure you want to logout?')">
+                    </p>
+                </form>
+            </div>
             <ul class="menu">
                 <li>
                     <a href="index.php" class="active">Home</a>
@@ -49,13 +57,13 @@ $content = "";
                 <li>
                     <a href="registration.php">Register User</a>
                 </li>
-                <? echo("THIS IS SESSION LVL" + $_SESSION['user_lvl'])?>
-                <?php if(isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1 ): ?>
-                        <li>
-                            <a href="userList.php">User list</a>
-                        </li>
-                <?php endif?>
-                    
+                <? echo ("THIS IS SESSION LVL" + $_SESSION['user_lvl']) ?>
+                <?php if (isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1): ?>
+                    <li>
+                        <a href="userList.php">User list</a>
+                    </li>
+                <?php endif ?>
+
             </ul>
         </div>
         <div id="all_blogs">
@@ -94,4 +102,5 @@ $content = "";
         </div>
     </div>
 </body>
+
 </html>

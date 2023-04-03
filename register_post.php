@@ -23,6 +23,7 @@ if (
             $client_email = $_POST['email'];
             $client_password = $_POST['password'];
             $client_lvl = '3';
+            $hashed_password = password_hash($client_password,PASSWORD_DEFAULT);
 
             //  Build the parameterized SQL query and bind to the above sanitized values.
             $query = "INSERT INTO users (name, email, password,user_lvl) VALUES (:name, :email, :password, :user_lvl)";
@@ -31,7 +32,7 @@ if (
             //  Bind values to the parameters
             $statement->bindValue(":name", $client_name);
             $statement->bindValue(":email", $client_email);
-            $statement->bindValue(":password", $client_password);
+            $statement->bindValue(":password", $hashed_password);
             $statement->bindValue(":user_lvl", $client_lvl);
 
        

@@ -7,7 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (
         isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty(($_POST['email']))
     ) {
-
+        // Registration is successful
+    } else if (strlen($_POST['password']) < 8) {
+        echo ("Password must be at least 8 characters long");
+        exit;
     } else {
 
         echo ('Registration Failed please complete all the required fields.');
@@ -45,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <li>
                 <a href="registration.php" class="active">Register User</a>
             </li>
-            <?php if(isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1 ): ?>
-                        <li>
-                            <a href="userList.php">User list</a>
-                        </li>
-            <?php endif?>
+            <?php if (isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1): ?>
+                <li>
+                    <a href="userList.php">User list</a>
+                </li>
+            <?php endif ?>
         </ul>
         <div id="all_blogs">
             <form name="registration_form" action="register_post.php" method="post">

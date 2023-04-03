@@ -18,7 +18,7 @@ if (
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRIPPED);
 
         $content = $_POST['content'];
-   
+
         $user_id = $_SESSION['user_id'];
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
@@ -77,7 +77,14 @@ if (
             exit;
         }
     }
-   
+
+} else if ($_POST['logout']) {
+    //Logout user fromt the system
+    session_unset();
+    session_destroy();
+    header("Location: authenticate.php");
+    exit;
+
 } else {
     $errorMessage = "The tweet message or title is empty";
 }

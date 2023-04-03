@@ -6,8 +6,6 @@ session_start();
 // define('ADMIN_LOGIN', '1');
 // define('ADMIN_EMAIL', 'test2@mail.com');
 
-define('ADMIN_PASSWORD', '1');
-
 $userNameSet = isset($_SESSION['user_name']);
 $userLvlSet = isset($_SESSION['user_lvl']);
 $userEmailSet = isset($_SESSION['user_email']);
@@ -16,43 +14,49 @@ $userEmailSet = isset($_SESSION['user_email']);
 // session_unset(); 
 // session_destroy(); 
 
-
 // Check if session is already set 
-if(!$userNameSet && !$userLvlSet && !$userEmailSet){
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // Code to handle form submission
-  if (
-    !isset($_POST['email']) && !isset($_POST['password'])
-  ) {
-    echo ("Login Failed");
-    exit;
-  } else {
-    // SQL is written as a String.
+if (!$userNameSet && !$userLvlSet && !$userEmailSet) {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Code to handle form submission
+    if (
+      !isset($_POST['email']) && !isset($_POST['password'])
+    ) {
+      echo ("Login Failed");
+      exit;
+    } else {
+      // SQL is written as a String.
       // SQL is written as a String.
       $userMail = ($_POST['email']);
+      $userPassword = ($_POST['password']);
 
-$query = "SELECT * FROM users WHERE email = :email" ;
+      $query = "SELECT * FROM users WHERE email = :email";
 
-// A PDO::Statement is prepared from the query.
-$statement = $db->prepare($query);
-$statement->bindParam(':email', $userMail);
-// Execution on the DB server is delayed until we execute().
-$statement->execute();
+      // A PDO::Statement is prepared from the query.
+      $statement = $db->prepare($query);
+      $statement->bindParam(':email', $userMail);
+      // Execution on the DB server is delayed until we execute().
+      $statement->execute();
 
-$row = $statement->fetch();
-
-$_SESSION['user_name'] = $row['name'];
-$_SESSION['user_id'] = $row['user_id'];
-$_SESSION['user_lvl'] = $row['user_lvl'];
-$_SESSION['user_email'] = ($_POST['email']);
-
-    header('Location: create.php');
+      $row = $statement->fetch();
+      if(password_verify($userPassword,$row['password'])){
+        $_SESSION['user_name'] = $row['name'];
+        $_SESSION['user_id'] = $row['user_id'];
+        $_SESSION['user_lvl'] = $row['user_lvl'];
+        $_SESSION['user_email'] = ($_POST['email']);
+  
+        header('Location: create.php');
+      }
+      else{
+        echo ("Login Failed Incorret Password");
+      exit;
+      }
+   
+    }
   }
-}
-}else{
-  echo("Login Successful");
- // header("refresh:5;url=create.php");
- header('Location: create.php');
+} else {
+  echo ("Login Successful");
+  // header("refresh:5;url=create.php");
+  header('Location: create.php');
 }
 ?>
 
