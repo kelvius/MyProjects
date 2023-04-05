@@ -57,6 +57,9 @@ $content = "";
                     <a href="authenticate.php">New Post</a>
                 </li>
                 <li>
+                    <a href="createCategories.php">Categorie</a>
+                </li>
+                <li>
                     <a href="registration.php">Register User</a>
                 </li>
                 <? echo ("THIS IS SESSION LVL" + $_SESSION['user_lvl']) ?>
