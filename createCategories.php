@@ -31,6 +31,7 @@ $content = "";
     <link rel="stylesheet" href="main.css">
     <title>Drip Book</title>
 </head>
+
 <body>
     <!-- Remember that alternative syntax is good and html inside php is bad -->
     <div id="wrapper">
@@ -42,16 +43,22 @@ $content = "";
                     <a href="index.php" >Home</a>
                 </li>
                 <li>
-                    <a href="authenticate.php" class="active">New Post</a>
+                    <a href="authenticate.php">New Post</a>
                 </li>
                 <li>
                     <a href="registration.php">Register User</a>
                 </li>
-                <?php if(isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1 ): ?>
-                        <li>
-                            <a href="userList.php">User list</a>
-                        </li>
-                <?php endif?>
+                <? echo ("THIS IS SESSION LVL" + $_SESSION['user_lvl']) ?>
+                <?php if (isset($_SESSION['user_lvl'])): ?>
+                    <li>
+                    <a href="createCategories.php" class="active">Categories</a>
+                </li>
+                <?php endif ?>
+                <?php if (isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1): ?>
+                    <li>
+                        <a href="userList.php">User list</a>
+                    </li>
+                <?php endif ?>
             </ul>
         <div id="all_blogs">
             <form action="categorie_post.php" method="post">
@@ -70,20 +77,23 @@ $content = "";
         </div>
 
         <div id="all_categories">
-        <h2>Categorie list:</h2>
+            <h2>Categorie list:</h2>
             <?php if ($statement->rowCount() > 0): ?>
                 <?php while ($row = $statement->fetch()): ?>
-                    <ul class="menu">
-                        <li>
-                            <div class="categories">
-                               
-                                <p>
-                                    <h3><?= $row['categorie_name'] ?> <input type="submit" name="delete" value="Delete"></h3>
-                                        
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
+                    <form action="categorie_post.php" method="post">
+                        <ul class="menu">
+                            <li>
+                                <div class="categories">
+                                    <p>
+                                        <input type="hidden" name="categorie_id" value="<?= $row['categorie_id'] ?>">
+                                    <h3>
+                                        <?= $row['categorie_name'] ?> <input type="submit" name="delete" value="Delete">
+                                    </h3>
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
                 <?php endwhile ?>
             <?php else: ?>
                 <h2>No user found.</h2>

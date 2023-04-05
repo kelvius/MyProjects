@@ -57,18 +57,19 @@ $content = "";
                     <a href="authenticate.php">New Post</a>
                 </li>
                 <li>
-                    <a href="createCategories.php">Categorie</a>
-                </li>
-                <li>
                     <a href="registration.php">Register User</a>
                 </li>
                 <? echo ("THIS IS SESSION LVL" + $_SESSION['user_lvl']) ?>
+                <?php if (isset($_SESSION['user_lvl'])): ?>
+                    <li>
+                    <a href="createCategories.php">Categories</a>
+                </li>
+                <?php endif ?>
                 <?php if (isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1): ?>
                     <li>
                         <a href="userList.php">User list</a>
                     </li>
                 <?php endif ?>
-
             </ul>
         </div>
         <div id="all_blogs">
