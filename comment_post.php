@@ -51,14 +51,23 @@ if (
     } else if (isset($_POST['visibility'])) {
         $comment_id = $_POST['comment_id'];
         $post_id = $_POST['post_id'];
+        $oldVisibility = $_POST['visibility_id'];
+        echo("OV: $oldVisibility ");
+        if($oldVisibility === '1'){
+            echo("line58:");
+            $newVisibility = 0;
+        }else{
+            $newVisibility = 1;
+            echo("line62:");
+        }
 
-        echo ("Testing commentId: $comment_id");
         //  Build the parameterized SQL query and bind to the above sanitized values.";
         $query = "DELETE FROM comments WHERE comment_id = :comment_id";
-
+        $query = "UPDATE comments SET visibility = :visibility WHERE comment_id = :comment_id";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
+        $statement->bindParam(":visibility", $newVisibility);
         $statement->bindParam(":comment_id", $comment_id);
 
         //  Execute the DELETE.
