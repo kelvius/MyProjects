@@ -17,18 +17,21 @@ if (
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRIPPED);
 
+        $categorie_id = $_POST['tag'];
+
         $content = $_POST['content'];
 
         $user_id = $_SESSION['user_id'];
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "INSERT INTO content_post (user_id, title, content) VALUES (:user_id, :title, :content)";
+        $query = "INSERT INTO content_post (user_id, title, content,categorie_id) VALUES (:user_id, :title, :content, :categorie_id)";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
         $statement->bindValue(":user_id", $user_id);
         $statement->bindValue(":title", $title);
         $statement->bindValue(":content", $content);
+        $statement->bindValue(":categorie_id", $categorie_id);
 
         //  Execute the INSERT.
         //  execute() will check for possible SQL injection and remove if necessary

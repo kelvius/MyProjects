@@ -10,6 +10,24 @@ Description: Project
 require('connect.php');
 //require('authenticate.php');
 session_start();
+
+// SQL is written as a String.
+$query = "SELECT * FROM categories ORDER BY categorie_id DESC";
+
+// A PDO::Statement is prepared from the query.
+$statement = $db->prepare($query);
+
+// Execution on the DB server is delayed until we execute().
+$statement->execute();
+
+$tagList = array();
+if ($statement->rowCount() > 0) {
+    while ($row = $statement->fetch()) {
+        $tagList[$row['categorie_id']] = $row['categorie_name'];
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -80,6 +98,7 @@ session_start();
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
         });
     </script>
+
 </head>
 
 <body>
@@ -89,21 +108,21 @@ session_start();
             <h1><a href="index.php">Kelvin's Blog - New Blog Post</a></h1>
         </div>
         <ul class="menu">
+            <li>
+                <a href="index.php">Home</a>
+            </li>
+            <li>
+                <a href="authenticate.php" class="active">New Post</a>
+            </li>
+            <li>
+                <a href="registration.php">Register User</a>
+            </li>
+            <?php if (isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1): ?>
                 <li>
-                    <a href="index.php" >Home</a>
+                    <a href="userList.php">User list</a>
                 </li>
-                <li>
-                    <a href="authenticate.php" class="active">New Post</a>
-                </li>
-                <li>
-                    <a href="registration.php">Register User</a>
-                </li>
-                <?php if(isset($_SESSION['user_lvl']) && $_SESSION['user_lvl'] === 1 ): ?>
-                        <li>
-                            <a href="userList.php">User list</a>
-                        </li>
-                <?php endif?>
-            </ul>
+            <?php endif ?>
+        </ul>
         <div id="all_blogs">
             <form action="post.php" method="post">
                 <fieldset>
@@ -117,7 +136,13 @@ session_start();
                         <textarea name="content" id="content"></textarea>
                     </p>
                     <p>
-
+                        <label for="tag">Select a tag:</label>
+                        <select name="tag" id="tag">
+                            <option value="">--Please chose a tag--</option>
+                            <?php foreach ($tagList as $tag => $value): ?>
+                                <option value="<?php echo $tag ?>"><?php echo $value ?></option>
+                            <?php endforeach?>
+                        </select>
                     </p>
                     <p>
                         <input type="hidden" name="id">
