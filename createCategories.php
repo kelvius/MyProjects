@@ -70,7 +70,7 @@ $content = "";
                     </p>
                     <p>
                         <input type="hidden" name="id">
-                        <input type="submit" name="create" value="Create">
+                        <input class="greenButton" type="submit" name="create" value="Create">
                     </p>
                 </fieldset>
             </form>
@@ -87,7 +87,7 @@ $content = "";
                                     <p>
                                         <input type="hidden" name="categorie_id" value="<?= $row['categorie_id'] ?>">
                                     <h3>
-                                        <?= $row['categorie_name'] ?> <input type="submit" name="delete" value="Delete">
+                                        <?= $row['categorie_name'] ?> <input class="redButton" type="submit" name="delete" value="Delete">
                                     </h3>
                                     </p>
                                 </div>

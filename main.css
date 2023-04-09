@@ -129,3 +129,11 @@ div#footer {
 .tagButton{
   background-color: greenyellow;
 }
+
+.redButton{
+  background-color: red;
+}
+
+.greenButton{
+  background-color: greenyellow;
+}

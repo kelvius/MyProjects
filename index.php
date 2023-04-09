@@ -11,16 +11,35 @@ session_start();
 // session_unset(); 
 // session_destroy(); 
 
-// SQL is written as a String.
-$query = "SELECT * FROM content_post ORDER BY post_id DESC LIMIT 5";
+// Get the current page number, or default to 1 if not set
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-// A PDO::Statement is prepared from the query.
+// Define how many results to show per page
+$resultsPerPage = 5;
+
+// Calculate the offset based on the current page and number of results per page
+$offset = ($page - 1) * $resultsPerPage;
+
+// SQL query to retrieve the desired range of rows
+$query = "SELECT * FROM content_post ORDER BY post_id DESC LIMIT $offset, $resultsPerPage";
+
+// Prepare and execute the query
 $statement = $db->prepare($query);
-
-// Execution on the DB server is delayed until we execute().
 $statement->execute();
 
-$content = "";
+// Count the total number of rows in the table
+$totalResults = $db->query("SELECT COUNT(*) FROM content_post")->fetchColumn();
+
+// Calculate the total number of pages
+$totalPages = ceil($totalResults / $resultsPerPage);
+
+// Build the pagination links
+$pagination = "";
+if ($totalPages > 1) {
+    for ($i = 1; $i <= $totalPages; $i++) {
+        $pagination .= "<a href=\"index.php?page=$i\">$i</a> ";
+    }
+}
 
 // SQL is written as a String.
 $query2 = "SELECT * FROM categories ORDER BY categorie_id DESC";
@@ -99,59 +118,66 @@ if ($statement2->rowCount() > 0) {
             <input type="text" name="search" placeholder="Search...">
 
             <label for="tag">Select a tag:</label>
-                        <select name="tag" id="tag">
-                            <option value="">--Please chose a tag--</option>
-                            <?php foreach ($tagList as $tag => $value): ?>
-                                <option value="<?php echo $tag ?>"><?php echo $value ?></option>
-                            <?php endforeach?>
-                        </select>
+            <select name="tag" id="tag">
+                <option value="">--Please chose a tag--</option>
+                <?php foreach ($tagList as $tag => $value): ?>
+                    <option value="<?php echo $tag ?>"><?php echo $value ?></option>
+                <?php endforeach ?>
+            </select>
             <button type="submit">Search</button>
         </form>
-                     
+
 
         <!-- Display the search results -->
         <div id="all_blogs">
             <?php if ($statement->rowCount() > 0): ?>
                 <?php while ($row = $statement->fetch()): ?>
                     <!-- Filter the results by the post's title -->
-                    
-                    <?php if (!empty($_GET['tag']) && $_GET['tag'] == $row['categorie_id'] || $_GET['tag'] == ""): ?>
-                        
-                    <?php if (empty($_GET['search']) || strpos($row['title'], $_GET['search']) !== false): ?>
-                        <ul class="menu">
-                            <li>
-                                <div class="blog_post">
-                                    <h2><a href="display.php?id=<?= $row['post_id'] ?>"><?= $row['title'] ?></a> </h2>
-                                    <p>
-                                        <small>
-                                            <?= date("F d, Y, h:ia", strtotime($row['created_at_date'])) ?>
-                                            <a href="edit.php?id=<?= $row['post_id'] ?>">edit</a>
-                                        </small>
-                                    </p>
-                                </div>
-                                <?php if (strlen($row['content']) >= 200): {
-                                    $content = mb_substr($row['content'], 0, 200) . "<a href='display.php?id=" . $row['post_id'] . "'>Read Full Post</a>";
-                                }
-                                ?>
-                                <?php else: ?>
-                                    <?php $content = $row['content'] ?>
-                                <?php endif ?>
-                                <div class='blog_content'>
-                                    <?= $content ?>
-                                </div>
 
-                                <div>
-                                    <?php foreach ($tagList as $tag => $value): ?>
-                                        <?php if ($row['categorie_id'] === $tag): ?>
-                                            <input class="tagButton" type="submit" name="tag" value=<?php echo $value ?>>
-                                        <?php endif ?>
-                                    <?php endforeach ?>
-                                </div>
-                            </li>
-                        </ul>
-                    <?php endif ?>
+                    <?php if (empty($_GET['tag']) || $_GET['tag'] == $row['categorie_id'] || $_GET['tag'] == ""): ?>
+
+                        <?php if (empty($_GET['search']) || strpos($row['title'], $_GET['search']) !== false): ?>
+                            <ul class="menu">
+                                <li>
+                                    <div class="blog_post">
+                                        <h2><a href="display.php?id=<?= $row['post_id'] ?>"><?= $row['title'] ?></a> </h2>
+                                        <p>
+                                            <small>
+                                                <?= date("F d, Y, h:ia", strtotime($row['created_at_date'])) ?>
+                                                <a href="edit.php?id=<?= $row['post_id'] ?>">edit</a>
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <?php if (strlen($row['content']) >= 200): {
+                                        $content = mb_substr($row['content'], 0, 200) . "<a href='display.php?id=" . $row['post_id'] . "'>Read Full Post</a>";
+                                    }
+                                    ?>
+                                    <?php else: ?>
+                                        <?php $content = $row['content'] ?>
+                                    <?php endif ?>
+                                    <div class='blog_content'>
+                                        <?= $content ?>
+                                    </div>
+
+                                    <div>
+                                        <?php foreach ($tagList as $tag => $value): ?>
+                                            <?php if ($row['categorie_id'] === $tag): ?>
+                                                <input class="tagButton" type="submit" name="tag" value=<?php echo $value ?>>
+                                            <?php endif ?>
+                                        <?php endforeach ?>
+                                    </div>
+                                </li>
+                            </ul>
+                        <?php endif ?>
                     <?php endif ?>
                 <?php endwhile ?>
+
+                <!-- Display the pagination links -->
+                <?php if ($totalPages > 1): ?>
+                    <div class="pagination">
+                        <?= $pagination ?>
+                    </div>
+                <?php endif ?>
             <?php else: ?>
                 <h2>No blogs found.</h2>
             <?php endif ?>
