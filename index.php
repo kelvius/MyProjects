@@ -114,6 +114,9 @@ if ($statement2->rowCount() > 0) {
             <?php if ($statement->rowCount() > 0): ?>
                 <?php while ($row = $statement->fetch()): ?>
                     <!-- Filter the results by the post's title -->
+                    
+                    <?php if (!empty($_GET['tag']) && $_GET['tag'] == $row['categorie_id'] || $_GET['tag'] == ""): ?>
+                        
                     <?php if (empty($_GET['search']) || strpos($row['title'], $_GET['search']) !== false): ?>
                         <ul class="menu">
                             <li>
@@ -146,6 +149,7 @@ if ($statement2->rowCount() > 0) {
                                 </div>
                             </li>
                         </ul>
+                    <?php endif ?>
                     <?php endif ?>
                 <?php endwhile ?>
             <?php else: ?>
