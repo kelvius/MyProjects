@@ -72,6 +72,48 @@ $content = "";
                 <?php endif ?>
             </ul>
         </div>
+        <!-- Add a form element to accept user's search query -->
+<form method="GET" action="index.php">
+  <input type="text" name="search" placeholder="Search...">
+  <button type="submit">Search</button>
+</form>
+
+<!-- Display the search results -->
+<div id="all_blogs">
+  <?php if ($statement->rowCount() > 0): ?>
+    <?php while ($row = $statement->fetch()): ?>
+      <!-- Filter the results by the post's title -->
+      <?php if (empty($_GET['search']) || strpos($row['title'], $_GET['search']) !== false): ?>
+        <ul class="menu">
+          <li>
+            <div class="blog_post">
+              <h2><a href="display.php?id=<?= $row['post_id'] ?>"><?= $row['title'] ?></a> </h2>
+              <p>
+                <small>
+                  <?= date("F d, Y, h:ia", strtotime($row['created_at_date'])) ?>
+                  <a href="edit.php?id=<?= $row['post_id'] ?>">edit</a>
+                </small>
+              </p>
+            </div>
+            <?php if (strlen($row['content']) >= 200): {
+              $content = mb_substr($row['content'], 0, 200) . "<a href='display.php?id=" . $row['post_id'] . "'>Read Full Post</a>";
+            }
+            ?>
+            <?php else: ?>
+              <?php $content = $row['content'] ?>
+            <?php endif ?>
+            <div class='blog_content'>
+              <?= $content ?>
+            </div>
+          </li>
+        </ul>
+      <?php endif ?>
+    <?php endwhile ?>
+  <?php else: ?>
+    <h2>No blogs found.</h2>
+  <?php endif ?>
+</div>
+
         <div id="all_blogs">
             <?php if ($statement->rowCount() > 0): ?>
                 <?php while ($row = $statement->fetch()): ?>
