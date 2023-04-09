@@ -9,7 +9,6 @@ Description: Project
 require('connect.php');
 //require('authenticate.php');
 
-
 $id = 0;
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -35,7 +34,24 @@ if (filteredData()) {
     $statement->execute();
 
     $blogData = $statement->fetch();
+
+    // SQL is written as a String.
+    $query2 = "SELECT * FROM categories ORDER BY categorie_id DESC";
+
+    // A PDO::Statement is prepared from the query.
+    $statement2 = $db->prepare($query2);
+
+    // Execution on the DB server is delayed until we execute().
+    $statement2->execute();
+
+    $tagList = array();
+    if ($statement2->rowCount() > 0) {
+        while ($row = $statement2->fetch()) {
+            $tagList[$row['categorie_id']] = $row['categorie_name'];
+        }
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +115,7 @@ if (filteredData()) {
             height: 400,
             image_caption: true,
             quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-            noneditable_class: 'mceNonEditable',
+            noneditable_class: 'mceNonEditaable',
             toolbar_mode: 'sliding',
             contextmenu: 'link image table',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
@@ -124,17 +140,35 @@ if (filteredData()) {
                     <legend>Edit Blog Post</legend>
                     <p>
                         <label for="title">Title</label>
-                        <input name="title" id="title" value="<?= $blogData['title']?>" >
+                        <input name="title" id="title" value="<?= $blogData['title'] ?>">
                     </p>
                     <p>
                         <label for="content">Content</label>
                         <textarea name="content" id="content"><?= $blogData['content'] ?></textarea>
                     </p>
                     <p>
-                        <input type="hidden" name="id" value=<?= $id ?> >
-                        <input type="submit" name="update" value="Update" >
+                        <label for="tag">Select a tag:</label>
+                        <select name="tag" id="tag">
+
+                            <?php foreach ($tagList as $tag => $value): ?>
+                                <?php if ($blogData['categorie_id'] === $tag): ?>
+                                    <option value="<?php echo $tag ?>"><?php echo $value ?></option>
+                                <?php endif ?>
+                            <?php endforeach ?>
+
+                            <?php foreach ($tagList as $tag => $value): ?>
+                                <?php if ($tag != $blogData['categorie_id']): ?>
+                                    <option value="<?php echo $tag ?>"><?php echo $value ?></option>
+                                <?php endif ?>
+                            <?php endforeach ?>
+
+                        </select>
+                    </p>
+                    <p>
+                        <input type="hidden" name="id" value=<?= $id ?>>
+                        <input type="submit" name="update" value="Update">
                         <input type="submit" name="delete" value="Delete"
-                            onclick="return confirm('Are you sure you wish to delete this post?')" >
+                            onclick="return confirm('Are you sure you wish to delete this post?')">
                     </p>
                 </fieldset>
             </form>

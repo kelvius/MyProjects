@@ -125,3 +125,7 @@ div#footer {
   padding: 10px;
   margin-bottom: 20px;
 }
+
+.tagButton{
+  background-color: greenyellow;
+}

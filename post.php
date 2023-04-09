@@ -43,17 +43,19 @@ if (
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRIPPED);
         $content = $_POST['content'];
+        $categorie_id = $_POST['tag'];
         $post_id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
         //$query = "UPDATE content_post SET title=$title, content=$content WHERE id=$id";
-        $query = "UPDATE content_post SET title = :title, content = :content WHERE post_id = :post_id";
+        $query = "UPDATE content_post SET title = :title, content = :content, categorie_id = :categorie_id WHERE post_id = :post_id";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
         $statement->bindValue(":title", $title);
         $statement->bindValue(":content", $content);
         $statement->bindValue(":post_id", $post_id);
+        $statement->bindValue(":categorie_id", $categorie_id);
 
         //  Execute the UPDATE.
         //  execute() will check for possible SQL injection and remove if necessary
