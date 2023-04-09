@@ -47,6 +47,12 @@ $content = "";
                             onclick="return confirm('Are you sure you want to logout?')">
                     </p>
                 </form>
+                <?php else: ?>
+                    <form action="post.php" method="post">
+                    <p>
+                        <input type="submit" name="login" value="login"/>
+                    </p>
+                    </form>
                 <?php endif?>
             </div>
             <ul class="menu">

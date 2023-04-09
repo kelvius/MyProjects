@@ -85,7 +85,12 @@ if (
     header("Location: index.php");
     exit;
 
-} else {
+} else if ($_POST['login']) {
+    //login user fromt the system
+    header("Location: authenticate.php");
+    exit;
+
+}else {
     $errorMessage = "The tweet message or title is empty";
 }
 

@@ -117,6 +117,9 @@ session_start();
                         <textarea name="content" id="content"></textarea>
                     </p>
                     <p>
+
+                    </p>
+                    <p>
                         <input type="hidden" name="id">
                         <input type="submit" name="create" value="Create">
                     </p>
