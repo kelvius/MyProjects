@@ -23,8 +23,13 @@ if (
 
         $user_id = $_SESSION['user_id'];
 
+        $slug = trim($_POST['title']);
+        $slug = strtolower($slug);
+        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
+        $slug = trim($slug, '-');
+
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "INSERT INTO content_post (user_id, title, content,categorie_id) VALUES (:user_id, :title, :content, :categorie_id)";
+        $query = "INSERT INTO content_post (user_id, title, content, categorie_id, slug) VALUES (:user_id, :title, :content, :categorie_id, :slug)";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
@@ -32,6 +37,7 @@ if (
         $statement->bindValue(":title", $title);
         $statement->bindValue(":content", $content);
         $statement->bindValue(":categorie_id", $categorie_id);
+        $statement->bindValue(":slug", $slug);
 
         //  Execute the INSERT.
         //  execute() will check for possible SQL injection and remove if necessary

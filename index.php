@@ -140,7 +140,10 @@ if ($statement2->rowCount() > 0) {
                             <ul class="menu">
                                 <li>
                                     <div class="blog_post">
-                                        <h2><a href="display.php?id=<?= $row['post_id'] ?>"><?= $row['title'] ?></a> </h2>
+                                        
+                                        <h2>
+                                            <a href="display.php?id=<?= $row['post_id'] ?>&slug=<?=$row['slug']?>" class="title-link"><?= $row['title'] ?></a> 
+                                        </h2>
                                         <p>
                                             <small>
                                                 <?= date("F d, Y, h:ia", strtotime($row['created_at_date'])) ?>

@@ -26,8 +26,6 @@ if ($statement->rowCount() > 0) {
         $tagList[$row['categorie_id']] = $row['categorie_name'];
     }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -146,6 +144,7 @@ if ($statement->rowCount() > 0) {
                     </p>
                     <p>
                         <input type="hidden" name="id">
+                        <input type="hidden" id="slug" name="slug" value="<?= isset($slug) ? $slug : '' ?>">
                         <input type="submit" name="create" value="Create">
                     </p>
                 </fieldset>

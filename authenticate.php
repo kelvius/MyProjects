@@ -39,7 +39,7 @@ if (!$userIdSet && !$userNameSet && !$userLvlSet && !$userEmailSet) {
       $statement->execute();
 
       $row = $statement->fetch();
-      if(password_verify($userPassword,$row['password'])){
+      if($row!=null && password_verify($userPassword,$row['password'])){
         $_SESSION['user_name'] = $row['name'];
         $_SESSION['user_id'] = $row['user_id'];
         $_SESSION['user_lvl'] = $row['user_lvl'];

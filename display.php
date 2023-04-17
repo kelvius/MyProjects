@@ -10,10 +10,10 @@ require('connect.php');
 session_start();
 $id = 0;
 
-
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 }
+
 
 function filteredData()
 {
@@ -25,6 +25,7 @@ function filteredData()
 }
 
 if (filteredData()) {
+
     // SQL is written as a String.
     $query = "SELECT * FROM content_post WHERE post_id = $id";
 
@@ -49,6 +50,22 @@ if (filteredData()) {
     // Execution on the DB server is delayed until we execute().
     $statement_comments->execute();
 
+    // Slug fetching
+    $query2 = "SELECT *, (SELECT slug FROM content_post WHERE post_id = :id) as slug FROM content_post WHERE post_id = :id";
+   
+    $statement2 = $db->prepare($query2);
+   
+    $statement2->bindValue(':id', $id);
+   
+    $statement2->execute();
+   
+    $post = $statement2->fetch();
+   
+    $slug = isset($_GET['slug']) ? $_GET['slug'] : '';
+    if ($post !== false && $post['slug'] !== $slug) {
+        header("Location: index.php");
+        exit();
+    }
 }
 ?>
 
@@ -106,6 +123,7 @@ if (filteredData()) {
                     </p>
                     <p>
                         <input type="hidden" name="post_id" value="<?= $blogData['post_id'] ?>">
+                        <input type="hidden" name="slug" value="<?= $blogData['slug'] ?>">
                         <input type="hidden" name="title" value="<?= $blogData['title'] ?>">
                         <input type="submit" name="submit" value="Comment">
                     </p>
@@ -139,6 +157,7 @@ if (filteredData()) {
                                         <form action="comment_post.php" method="post">
                                             <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
                                             <input type="hidden" name="comment_id" value="<?= $row['comment_id'] ?>">
+                                            <input type="hidden" name="slug" value="<?= $blogData['slug'] ?>">
                                             <input type="hidden" name="visibility_id" value="<?= $row['visibility'] ?>">
                                             <?php if ($row['visibility'] === 1): ?>
                                                 <input type="submit" name="visibility" value="Hide"
