@@ -11,6 +11,15 @@ require('connect.php');
 //require('authenticate.php');
 session_start();
 
+if(isset($_SESSION['alert_message'])) {
+    $message = $_SESSION['alert_message'];
+    //echo "<script>document.getElementById('error').style.visibility = 'visible';</script>"; 
+    //echo "<p>('$message')</p>";
+    echo "<script>alert('$message');</script>";
+    unset($_SESSION['alert_message']);
+    echo "<script>window.location.reload();</script>";
+}
+    
 // SQL is written as a String.
 $query = "SELECT * FROM categories ORDER BY categorie_id DESC";
 
@@ -26,6 +35,9 @@ if ($statement->rowCount() > 0) {
         $tagList[$row['categorie_id']] = $row['categorie_name'];
     }
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -122,7 +134,7 @@ if ($statement->rowCount() > 0) {
             <?php endif ?>
         </ul>
         <div id="all_blogs">
-            <form action="post.php" method="post">
+            <form action="post.php" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <legend>Create Drip Post</legend>
                     <p>
@@ -133,6 +145,11 @@ if ($statement->rowCount() > 0) {
                         <label for="content">Content</label>
                         <textarea name="content" id="content"></textarea>
                     </p>
+
+                    <p>
+                        <input type="file" id="file" name="file[]" multiple>
+                    </p>
+
                     <p>
                         <label for="tag">Select a tag:</label>
                         <select name="tag" id="tag">

@@ -146,6 +146,22 @@ if (filteredData()) {
                         <label for="content">Content</label>
                         <textarea name="content" id="content"><?= $blogData['content'] ?></textarea>
                     </p>
+
+                    <?php if (isset($blogPost['filename']) && !empty($blogPost['filename']) && $blogPost['filename'] !== null): ?>
+                             <div id="existing-image-container"> 
+                                <label>Existing Image:</label> 
+                                <?php $img_src = '../Create/uploads/' . $blogPost['filename']; ?> 
+                                <img src="<?= $img_src ?>" alt="<?= $blogPost['title'] ?>" style="width: 400px; height: auto;"> 
+                                <div> <input type="checkbox" name="delete_image" value="1"> 
+                                <label>Delete existing image</label> 
+                            </div> 
+                        </div> 
+                        <?php endif; ?>
+
+
+                    <p>
+                        <input type="file" id="file" name="file[]" multiple>
+                    </p>
                     <p>
                         <label for="tag">Select a tag:</label>
                         <select name="tag" id="tag">

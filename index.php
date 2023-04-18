@@ -158,10 +158,15 @@ if ($statement2->rowCount() > 0) {
                                     <?php else: ?>
                                         <?php $content = $row['content'] ?>
                                     <?php endif ?>
+                                    <?php if(!empty($row['image_path'])): ?>
+                                        <div>
+                                        <img src="<?php echo $row['image_path']; ?>" alt="No preview">
+                                    </div>
+                                    <?php endif?>
                                     <div class='blog_content'>
                                         <?= $content ?>
                                     </div>
-
+                                    
                                     <div>
                                         <?php foreach ($tagList as $tag => $value): ?>
                                             <?php if ($row['categorie_id'] === $tag): ?>

@@ -2,20 +2,25 @@
 require('connect.php');
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Code to handle form submission
-    if (
-        isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty(($_POST['email']))
-    ) {
-        // Registration is successful
-    } else if (strlen($_POST['password']) < 8) {
-        echo ("Password must be at least 8 characters long");
-        exit;
-    } else {
+$captcha_error = "";
 
-        echo ('Registration Failed please complete all the required fields.');
-        exit;
-    }
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        // Code to handle form submission
+        if (
+            isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && 
+            !empty($_POST['password']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && 
+            !empty(($_POST['email'])) && empty($captcha_error)
+        ) {
+            // Registration is successful
+        } if (strlen($_POST['password']) < 8) {
+            echo ("Password must be at least 8 characters long");
+            exit;
+        } else {
+
+            echo ('Registration Failed please complete all the required fields.');
+            exit;
+        }
 }
 
 ?>
@@ -70,6 +75,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <label for="remember">Remember me</label>
                 <input type="checkbox" name="remember" value="Remember me ">
+
+                <label for="captcha">Captcha:</label>
+                <img src="captcha.php" alt="CAPTCHA Image" style="margin-bottom: 10px;">
+                <label for="captcha-input">Enter the CAPTCHA:</label>
+                <input type="text" id="captcha-input" name="captcha-input" required>
+
+                <span class="error" id="captcha-error">
+                    <?= $captcha_error ?>
+                </span>
 
                 <input type="submit" name="register" value="Register">
             </form>

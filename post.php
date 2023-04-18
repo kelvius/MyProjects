@@ -6,8 +6,31 @@ Date: 03/13/23
 Description: Project
 ****************/
 
+// Required libraries for Gumlet Library
+require 'ImageResize.php';
+require 'ImageResizeException.php';
+
 require('connect.php');
 session_start();
+
+
+function resize_images($file_type,$file_name,$file_path,$file_directory,$allowed_mime_types){
+    if (in_array($file_type, $allowed_mime_types)) {
+
+       $medium_file = $file_directory . pathinfo($file_name, PATHINFO_FILENAME) . '_medium.' . pathinfo($file_name, PATHINFO_EXTENSION);
+       $thumbnail_file = $file_directory . pathinfo($file_name, PATHINFO_FILENAME) . '_thumbnail.' . pathinfo($file_name, PATHINFO_EXTENSION);
+
+       // Resized Max Width 50px
+       $image_thumbnail = new \Gumlet\ImageResize($file_path);
+       $image_thumbnail->resizeToWidth(50);
+       $image_thumbnail->save($thumbnail_file);
+
+       // Resized Max Width 400px
+       $image_medium = new \Gumlet\ImageResize($file_path);
+       $image_medium->resizeToWidth(400);
+       $image_medium->save($medium_file);
+   }
+}
 
 if (
     $_POST && !empty($_POST['title']) && strlen($_POST['title']) >= 1 &&
@@ -23,17 +46,66 @@ if (
 
         $user_id = $_SESSION['user_id'];
 
+        $file_path = "";
+        $file_path_medium = "";
+
+        //$file = $_FILES['file'];
+
+        if(isset($_FILES['file']) && isset($_POST['file'])){
+            echo 'File is exisisting';
+            $allowed_mime_types = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+            $file_directory = 'images/';
+        
+            // Create images directory if not existing
+            if(!file_exists($file_directory)){
+                mkdir("images");
+            }
+        
+            for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                echo 'Loop is running';
+                $file_type = mime_content_type($_FILES['file']['tmp_name'][$i]);
+                $file_name = $_FILES['file']['name'][$i];
+                $file_path = $file_directory . $file_name;
+
+                $pos = strrpos($file_path, "."); // Find the last occurrence of the "." character
+                if ($pos !== false) {
+                // If the "." character is found, insert "_medium" before it
+                $file_path_medium = substr_replace($file_path, "_medium", $pos, 0);
+                }
+               
+        
+                if (!in_array($file_type, $allowed_mime_types)) {
+                    $errorMessage = "File is type is invalid";
+                    $_SESSION['alert_message'] = $errorMessage;
+                     header("Location: authenticate.php");
+                     exit;
+                }
+        
+                if (file_exists($file_path)) {
+                    $errorMessage = "File is already existing";
+                    $_SESSION['alert_message'] = $errorMessage ;
+                     header("Location: authenticate.php");
+                     exit;
+                }
+        
+                move_uploaded_file($_FILES['file']['tmp_name'][$i], $file_path);
+        
+                resize_images($file_type,$file_name,$file_path,$file_directory,$allowed_mime_types);
+        }
+    }
+
         $slug = trim($_POST['title']);
         $slug = strtolower($slug);
-        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
-        $slug = trim($slug, '-');
+        $slug = preg_replace('/[^a-z0-9]+/', '/', $slug);
+        $slug = trim($slug, '&');
 
         //  Build the parameterized SQL query and bind to the above sanitized values.
-        $query = "INSERT INTO content_post (user_id, title, content, categorie_id, slug) VALUES (:user_id, :title, :content, :categorie_id, :slug)";
+        $query = "INSERT INTO content_post (user_id,image_path, title, content, categorie_id, slug) VALUES (:user_id, :image_path, :title, :content, :categorie_id, :slug)";
         $statement = $db->prepare($query);
 
         //  Bind values to the parameters
         $statement->bindValue(":user_id", $user_id);
+        $statement->bindValue(":image_path", $file_path_medium);
         $statement->bindValue(":title", $title);
         $statement->bindValue(":content", $content);
         $statement->bindValue(":categorie_id", $categorie_id);
@@ -42,8 +114,8 @@ if (
         //  Execute the INSERT.
         //  execute() will check for possible SQL injection and remove if necessary
         if ($statement->execute()) {
-            header("Location: index.php");
-            exit;
+          header("Location: index.php");
+           exit;
         }
     } else if (isset($_POST['update'])) {
         //  Sanitize user input to escape HTML entities and filter out dangerous characters.
